@@ -3,7 +3,6 @@ import org.gradle.api.internal.artifacts.dependencies.DefaultExternalModuleDepen
 
 
 plugins {
-
     id ("java-library")
     id ("maven-publish")
 	id ("dev.architectury.loom") version "1.13-SNAPSHOT"

@@ -13,6 +13,15 @@ public class Perm {
         System.out.println("Platform Permission Handler not found!");
         return false;
     }
+    
+    public static boolean check(ServerPlayerEntity plr, String perm) {
+        if (null == INSTANCE) {
+            System.out.println("Platform Permission Handler not found!");
+            return permissionLevel(plr, 1);
+        }
+        boolean ALL = INSTANCE.has_impl(plr, "multiworld.admin");
+        return ALL || INSTANCE.has_impl(plr, perm) || plr.isCreativeLevelTwoOp();
+    }
 
     public static boolean has(ServerPlayerEntity plr, String perm) {
         if (null == INSTANCE) {

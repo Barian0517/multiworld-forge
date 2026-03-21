@@ -203,36 +203,60 @@ public class MultiworldMod {
     	return Perm.permissionLevel(source, level);
     }
 
+    private static String[] perms_list = {
+    	"multiworld.cmd",
+    	"multiworld.admin",
+    	"multiworld.setspawn",
+    	"multiworld.spawn",
+    	"multiworld.gamerule",
+    	"multiworld.difficulty",
+    	"multiworld.tp",
+    	"multiworld.create",
+    	"multiworld.portal"
+    };
+    
     // On command register
     public static void register_commands(CommandDispatcher<ServerCommandSource> dispatcher) {
-        dispatcher.register(literal(CMD)
-                    .requires(source -> {
-                    	// #if mc182
-                        // if (net.fabricmc.loader.api.FabricLoader.getInstance().isDevelopmentEnvironment()) return true;
-                        // #endif
-                    	
-                    	try {
-                            return Perm.has(get_player(source), "multiworld.cmd") ||
-                                    Perm.has(get_player(source), "multiworld.admin") || permissionLevel(source, 1);
-                        } catch (Exception e) {
-                        	e.printStackTrace();
-                            return permissionLevel(source, 1);
-                        }
-                    }) 
-                        .executes(ctx -> {
-                            return broadcast(ctx.getSource(), Formatting.AQUA, null);
-                        })
-                        .then(argument("message", greedyString()).suggests(new InfoSuggest())
-                                .executes(ctx -> {
-                                    try {
-                                        return broadcast(ctx.getSource(), Formatting.AQUA, getString(ctx, "message") );
-                                    } catch (Exception e) {
-                                        e.printStackTrace();
-                                        return 1;
-                                    }
-                                 }))); 
+    	dispatcher.register(literal(CMD)
+    			.requires(source -> {
+    				// #if mc182
+    				// if (net.fabricmc.loader.api.FabricLoader.getInstance().isDevelopmentEnvironment()) return true;
+    				// #endif
+
+    				try {
+    					boolean has = Perm.has(get_player(source), "multiworld.cmd") ||
+    							Perm.has(get_player(source), "multiworld.admin") || permissionLevel(source, 1);
+
+    					if (has) {
+    						return has;
+    					}
+
+    					for (String perm : perms_list) {
+    						if (Perm.has(get_player(source), perm)) {
+    							// Has Permission for at least one sub-command.
+    							return true;
+    						}
+    					}
+    					return has;
+    				} catch (Exception e) {
+    					e.printStackTrace();
+    					return permissionLevel(source, 1);
+    				}
+    			}) 
+    			.executes(ctx -> {
+    				return broadcast(ctx.getSource(), Formatting.AQUA, null);
+    			})
+    			.then(argument("message", greedyString()).suggests(new InfoSuggest())
+    					.executes(ctx -> {
+    						try {
+    							return broadcast(ctx.getSource(), Formatting.AQUA, getString(ctx, "message") );
+    						} catch (Exception e) {
+    							e.printStackTrace();
+    							return 1;
+    						}
+    					}))); 
     }
-    
+
     /**
      * Preprocessed method.
      */
@@ -273,32 +297,7 @@ public class MultiworldMod {
 
         boolean ALL = Perm.has(plr, "multiworld.admin");
         String[] args = message.split(" ");
-        
-        /*if (args[0].equalsIgnoreCase("portaltest")) {
-            BlockPos pos = plr.getBlockPos();
-            pos = pos.add(2, 0, 2);
-            ServerWorld w = plr.getWorld();
 
-            Portal p = new Portal();
-            for (int x = 0; x < 4; x++) {
-                for (int y = 0; y < 5; y++) {
-                    BlockPos pos2 = pos.add(x, y, 0);
-                    if ((x > 0 && x < 3) && (y > 0 && y < 4)) {
-                        p.blocks.add(pos2);
-                        w.setBlockState(pos2, Blocks.NETHER_PORTAL.getDefaultState());
-                    } else
-                    w.setBlockState(pos2, Blocks.STONE.getDefaultState());
-                }
-            }
-            p.addToMap();
-            try {
-                p.save();
-            } catch (IOException e) {
-                plr.sendMessage(text("Failed saving portal data. Check console for details.", Formatting.RED), false);
-                e.printStackTrace();
-            }
-        }*/
-        
         // Help Command
         if (args[0].equalsIgnoreCase("help")) {
             for (String s : COMMAND_HELP) {
@@ -316,22 +315,22 @@ public class MultiworldMod {
         }
 
         // SetSpawn Command
-        if (args[0].equalsIgnoreCase("setspawn") && (ALL || Perm.has(plr, "multiworld.setspawn") )) {
+        if (args[0].equalsIgnoreCase("setspawn") && Perm.check(plr, "multiworld.setspawn")) {
             return SetspawnCommand.run(mc, plr, args);
         }
 
         // Spawn Command
-        if (args[0].equalsIgnoreCase("spawn") && (ALL || Perm.has(plr, "multiworld.spawn")) ) {
+        if (args[0].equalsIgnoreCase("spawn") && Perm.check(plr, "multiworld.spawn") ) {
             return SpawnCommand.run(mc, plr, args);
         }
         
         // Gamerule Command
-        if (args[0].equalsIgnoreCase("gamerule") && (ALL || Perm.has(plr, "multiworld.gamerule"))) {
+        if (args[0].equalsIgnoreCase("gamerule") && Perm.check(plr, "multiworld.gamerule")) {
         	return Util.getGameruleCommand().run(mc, plr, args);
         }
         
         // Difficulty Command
-        if (args[0].equalsIgnoreCase("difficulty") && (ALL || Perm.has(plr, "multiworld.difficulty"))) {
+        if (args[0].equalsIgnoreCase("difficulty") && Perm.check(plr, "multiworld.difficulty")) {
         	return DifficultyCommand.run(mc, plr, args);
         }
 
