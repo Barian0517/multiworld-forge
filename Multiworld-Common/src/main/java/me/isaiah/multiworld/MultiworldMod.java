@@ -163,8 +163,11 @@ public class MultiworldMod {
 			if (loaded > 0) {
 				LOGGER.info("Found " + loaded + " saved world portals.");
 			}
+
+			// Verify each loaded portal's destination is synced; logs an ERROR per broken one.
+			Portal.checkPortalsSync();
 		}
-		
+
     }
     
     public static void getFileConfiguration() {
