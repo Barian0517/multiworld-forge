@@ -40,21 +40,26 @@ def versions_forge    = ['1.20.1'] // ['1.18.2', '1.19.4', '1.20.1']
 def versions_neoforge = ['1.21.1', '1.21.2', '1.21.10']
 
 // Include Platform Projects
+/*
 versions_fabric.each { projectName ->
 	def wholePath = 'Multiworld-Fabric-' + projectName
 	include(':' + wholePath)
 	project(':' + wholePath).projectDir = new File(rootDir, 'fabric/' + wholePath)
 }
+*/
 
-include 'Multiworld-Fabric-bundle'
+// include 'Multiworld-Fabric-bundle'
 
+/*
 versions_neoforge.each { projectName ->
 	def wholePath = 'Multiworld-NeoForged-' + projectName
 	include(':' + wholePath)
 	project(':' + wholePath).projectDir = new File(rootDir, 'neoforge/' + wholePath)
 }
+*/
 
 // Forge
 // include 'Multiworld-Forge-1.18.2'
 // include 'Multiworld-Forge-1.19.4'
-include 'Multiworld-Forge-1.20.1'
+// include 'Multiworld-Forge-1.20.1'
+include 'Multiworld-realForge-1.20.1'

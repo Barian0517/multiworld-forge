@@ -71,12 +71,8 @@ public class WandEventHandler {
         	positions[0] = MultiworldMod.getWorldFor(player);
         } catch (NoSuchMethodError err) {
         	
-        	// 1.21.8:
-        	try {
-        		positions[0] = (ServerWorld) me.isaiah.multiworld.fabric.ICommonHooks.getWorld(player);
-        	} catch (Exception e) {
-        		err.printStackTrace();
-        		e.printStackTrace();
+        	if (positions[0] == null) {
+        		positions[0] = (ServerWorld) player.getWorld();
         	}
         }
 

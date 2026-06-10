@@ -22,9 +22,23 @@ import net.minecraft.world.World;
 import net.minecraft.world.gen.chunk.ChunkGenerator;
 import net.minecraft.world.level.storage.LevelStorage;
 import net.minecraft.world.level.storage.LevelStorage.Session;
-import xyz.nucleoid.fantasy.mixin.MinecraftServerAccess;
+// import xyz.nucleoid.fantasy.mixin.MinecraftServerAccess;
 
 public class Utils {
+
+	public static LevelStorage.Session getSession(MinecraftServer server) {
+	    try {
+	        for (java.lang.reflect.Field field : MinecraftServer.class.getDeclaredFields()) {
+	            if (field.getType() == LevelStorage.Session.class) {
+	                field.setAccessible(true);
+	                return (LevelStorage.Session) field.get(server);
+	            }
+	        }
+	        throw new RuntimeException("Could not find session field in MinecraftServer");
+	    } catch (Exception e) {
+	        throw new RuntimeException(e);
+	    }
+	}
 
 	public static final String WORLD_YML_NAME = "multiworld-world.yml";
 	
@@ -255,7 +269,7 @@ public class Utils {
  	}
  	
  	public static Path getWorldStoragePath(MinecraftServer server, WorldFolderMode mode) {
- 		Path overworld = ((MinecraftServerAccess) server).getSession().getWorldDirectory(World.OVERWORLD); 
+ 		Path overworld = getSession(server).getWorldDirectory(World.OVERWORLD); 
  		
  		// if (mode == WorldFolderMode.VANILLA) {
  			return overworld.resolve("dimensions");
@@ -273,7 +287,7 @@ public class Utils {
  	}
  	
  	public static Path getWorldPath(Identifier id, WorldFolderMode mode) {
- 		Path overworld = ((MinecraftServerAccess) MultiworldMod.mc).getSession().getWorldDirectory(World.OVERWORLD); 
+ 		Path overworld = getSession(MultiworldMod.mc).getWorldDirectory(World.OVERWORLD); 
  		
  		// if (mode == WorldFolderMode.VANILLA) {
  			return overworld.resolve("dimensions").resolve(id.getNamespace()).resolve(id.getPath());
@@ -292,7 +306,7 @@ public class Utils {
  	
  	@Deprecated
  	public static Path getWorldStoragePath(MinecraftServer server) {
- 		Path overworld = ((MinecraftServerAccess) server).getSession().getWorldDirectory(World.OVERWORLD); 
+ 		Path overworld = getSession(server).getWorldDirectory(World.OVERWORLD); 
  		
  		// Client side
  		if (!MultiworldMod.mc.isDedicated()) {

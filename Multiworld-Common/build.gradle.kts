@@ -29,6 +29,14 @@ java {
     }
 }
 
+sourceSets {
+    main {
+        java {
+            exclude("**/fabric/**")
+        }
+    }
+}
+
 base {
     archivesBaseName = "Multiworld"
     version = "-The-API"
@@ -74,7 +82,7 @@ dependencies {
 		isChanging = true // Make sure we get the latest version of iCommon
 	}
 
-	modImplementation(ic)
+	// modImplementation(ic)
 
 
 	setOf(
