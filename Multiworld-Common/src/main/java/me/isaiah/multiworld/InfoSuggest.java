@@ -239,12 +239,15 @@ public class InfoSuggest implements SuggestionProvider<ServerCommandSource> {
     	}
 
     	// Optional Arguments
-    	int maxDebug = 7;
+    	int maxDebug = 15;
         if (cmds.length <= 4 || (cmds.length <= maxDebug && !input.endsWith(" "))) {
         	if (cmds.length <= 4) {
         		builder.suggest("-g=<GENERATOR>");
         		builder.suggest("-s=<SEED>");
         		builder.suggest("-m=<WorldSaveMode>");
+        		builder.suggest("-t=<TerrainType>");
+        		builder.suggest("-mod-terrain=<true|false>");
+        		builder.suggest("-mod-biomes=<true|false>");
         		return;
         	}
 
@@ -265,17 +268,29 @@ public class InfoSuggest implements SuggestionProvider<ServerCommandSource> {
 	        		builder.suggest("-g=" + key.toUpperCase(Locale.ROOT));
 	        	}
         	} else if (current.startsWith("-m=")) {
-        		// builder.suggest("-m=VANILLA");
-        		
         		for (WorldFolderMode mode : WorldFolderMode.values()) {
         			builder.suggest("-m=" + mode);
         		}
-        		
+        	} else if (current.startsWith("-t=")) {
+        		builder.suggest("-t=NORMAL");
+        		builder.suggest("-t=FLAT");
+        		builder.suggest("-t=AMPLIFIED");
+        		builder.suggest("-t=LARGE_BIOMES");
+        		builder.suggest("-t=SINGLE_BIOME_SURFACE");
+        	} else if (current.startsWith("-mod-terrain=")) {
+        		builder.suggest("-mod-terrain=true");
+        		builder.suggest("-mod-terrain=false");
+        	} else if (current.startsWith("-mod-biomes=")) {
+        		builder.suggest("-mod-biomes=true");
+        		builder.suggest("-mod-biomes=false");
 	        } else {
 	        	if (current.startsWith("-")) {
 	        		if (!beforeStr.contains("-g=")) builder.suggest("-g=<GENERATOR>");
 	        		if (!beforeStr.contains("-s=")) builder.suggest("-s=<SEED>");
 	        		if (!beforeStr.contains("-m=")) builder.suggest("-m=<WorldSaveMode>");
+	        		if (!beforeStr.contains("-t=")) builder.suggest("-t=<TerrainType>");
+	        		if (!beforeStr.contains("-mod-terrain=")) builder.suggest("-mod-terrain=<true|false>");
+	        		if (!beforeStr.contains("-mod-biomes=")) builder.suggest("-mod-biomes=<true|false>");
 	        	}
 	        }
         }
