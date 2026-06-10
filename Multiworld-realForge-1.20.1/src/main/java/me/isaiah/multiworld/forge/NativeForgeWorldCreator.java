@@ -113,6 +113,56 @@ public class NativeForgeWorldCreator implements ICreator {
     }
 
     @Override
+    public ChunkGenerator get_custom_chunk_gen(MinecraftServer mc, String env, String terrainType, boolean modTerrain, boolean modBiomes) {
+        if (!env.equalsIgnoreCase("NORMAL") && !env.equalsIgnoreCase("DEFAULT")) {
+            return get_chunk_gen(mc, env);
+        }
+
+        ChunkGenerator defaultGen = get_chunk_gen(mc, env);
+        if (!(defaultGen instanceof net.minecraft.world.gen.chunk.NoiseChunkGenerator)) {
+            return defaultGen;
+        }
+
+        net.minecraft.world.gen.chunk.NoiseChunkGenerator noiseGen = (net.minecraft.world.gen.chunk.NoiseChunkGenerator) defaultGen;
+
+        net.minecraft.world.biome.source.BiomeSource finalBiomeSource = noiseGen.getBiomeSource();
+        if (!modBiomes) {
+            net.minecraft.registry.Registry<net.minecraft.world.biome.source.MultiNoiseBiomeSourceParameterList> paramListRegistry = mc.getRegistryManager().get(RegistryKeys.MULTI_NOISE_BIOME_SOURCE_PARAMETER_LIST);
+            net.minecraft.registry.entry.RegistryEntry<net.minecraft.world.biome.source.MultiNoiseBiomeSourceParameterList> overworldParams = paramListRegistry.getEntry(net.minecraft.world.biome.source.MultiNoiseBiomeSourceParameterLists.OVERWORLD).orElse(null);
+            if (overworldParams != null) {
+                finalBiomeSource = net.minecraft.world.biome.source.MultiNoiseBiomeSource.create(overworldParams);
+            }
+        }
+
+        net.minecraft.registry.entry.RegistryEntry<net.minecraft.world.gen.chunk.ChunkGeneratorSettings> finalSettings = noiseGen.getSettings();
+        net.minecraft.registry.Registry<net.minecraft.world.gen.chunk.ChunkGeneratorSettings> settingsRegistry = mc.getRegistryManager().get(RegistryKeys.CHUNK_GENERATOR_SETTINGS);
+        if (!modTerrain) {
+            var entry = settingsRegistry.getEntry(net.minecraft.world.gen.chunk.ChunkGeneratorSettings.OVERWORLD);
+            if (entry.isPresent()) finalSettings = entry.get();
+        }
+
+        if (terrainType.equalsIgnoreCase("AMPLIFIED")) {
+            var entry = settingsRegistry.getEntry(net.minecraft.world.gen.chunk.ChunkGeneratorSettings.AMPLIFIED);
+            if (entry.isPresent()) finalSettings = entry.get();
+        } else if (terrainType.equalsIgnoreCase("LARGE_BIOMES")) {
+            var entry = settingsRegistry.getEntry(net.minecraft.world.gen.chunk.ChunkGeneratorSettings.LARGE_BIOMES);
+            if (entry.isPresent()) finalSettings = entry.get();
+        } else if (terrainType.toUpperCase().startsWith("SINGLE_BIOME:")) {
+            String biomeId = terrainType.substring(13);
+            net.minecraft.util.Identifier id = net.minecraft.util.Identifier.tryParse(biomeId);
+            if (id != null) {
+                net.minecraft.registry.Registry<net.minecraft.world.biome.Biome> biomeRegistry = mc.getRegistryManager().get(RegistryKeys.BIOME);
+                net.minecraft.registry.entry.RegistryEntry.Reference<net.minecraft.world.biome.Biome> biomeEntry = biomeRegistry.getEntry(RegistryKey.of(RegistryKeys.BIOME, id)).orElse(null);
+                if (biomeEntry != null) {
+                    finalBiomeSource = new net.minecraft.world.biome.source.FixedBiomeSource(biomeEntry);
+                }
+            }
+        }
+
+        return new net.minecraft.world.gen.chunk.NoiseChunkGenerator(finalBiomeSource, finalSettings);
+    }
+
+    @Override
     public void set_difficulty(String id, Difficulty dif) {
         // Not easily supported in basic native implementation, requires full dimension data wrapping
     }

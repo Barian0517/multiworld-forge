@@ -142,13 +142,25 @@ public class CreateCommand implements Command {
 
         String customGen = "";
         
-        // WorldFolderMode dirMode = WorldFolderMode.BUKKIT;
-
         WorldFolderMode dirMode = WorldFolderMode.VANILLA;
+        String terrainType = "NORMAL";
+        boolean modTerrain = false;
+        boolean modBiomes = true;
         
         if (args.length > 3) {
         	for (int i = 3; i < args.length; i++) {
         		String arg = args[i];
+	        	
+	        	if (arg.startsWith("-t=") || arg.startsWith("-t ")) {
+	        		terrainType = arg.substring(3);
+	        		message(plr, "Using Terrain Type: " + terrainType);
+	        	}
+	        	if (arg.startsWith("-mod-terrain=")) {
+	        		modTerrain = Boolean.parseBoolean(arg.substring(13));
+	        	}
+	        	if (arg.startsWith("-mod-biomes=")) {
+	        		modBiomes = Boolean.parseBoolean(arg.substring(12));
+	        	}
 	        	
 	        	// Check if arg is "-g=GENERATOR"
 	        	Tuple<ChunkGenerator, String> resultA = checkArgForGen(mc, arg);
@@ -174,11 +186,14 @@ public class CreateCommand implements Command {
 	        		dirMode = m;
 	        	}
         	}
-        	
         }
         
-        // createConfigAndWorld(String id, String dimStr, Identifier dimId, ChunkGenerator gen, Difficulty dif, long seed, String cgen) {
-        ServerWorld world = MultiworldMod.createConfigAndWorld(arg1, args[2], dim, gen, Difficulty.NORMAL, seed, customGen, dirMode);
+        ChunkGenerator customGenInst = MultiworldMod.get_world_creator().get_custom_chunk_gen(mc, env, terrainType, modTerrain, modBiomes);
+        if (customGenInst != null) {
+            gen = customGenInst;
+        }
+
+        ServerWorld world = MultiworldMod.createConfigAndWorld(arg1, args[2], dim, gen, Difficulty.NORMAL, seed, customGen, dirMode, terrainType, modTerrain, modBiomes);
         
         // make_config(MultiworldMod.new_id(arg1), args[2], seed, customGen);
         // ServerWorld world = MultiworldMod.create_world(arg1, dim, gen, Difficulty.NORMAL, seed);
@@ -309,6 +324,19 @@ public class CreateCommand implements Command {
 			}
 
 			ChunkGenerator gen = get_chunk_gen(mc, env);
+			
+			String terrainType = "NORMAL";
+			boolean modTerrain = false;
+			boolean modBiomes = true;
+			if (config.is_set("terrain_type")) terrainType = config.getString("terrain_type");
+			if (config.is_set("mod_terrain")) modTerrain = config.getBoolean("mod_terrain");
+			if (config.is_set("mod_biomes")) modBiomes = config.getBoolean("mod_biomes");
+			
+			ChunkGenerator customGen = MultiworldMod.get_world_creator().get_custom_chunk_gen(mc, env, terrainType, modTerrain, modBiomes);
+			if (customGen != null) {
+				gen = customGen;
+			}
+			
 		    Identifier dim = get_dim_id(env);
 		    
 		    if (null == dim) {
@@ -443,7 +471,7 @@ public class CreateCommand implements Command {
 	 * {@link Utils#loadSavedMultiworldWorld(MinecraftServer, Path, Optional)}
 	 * on next server start.
 	 */
-	public static void makeConfigFile(Identifier id, String dim, long seed, String cgen, WorldFolderMode dirMode) {
+	public static void makeConfigFile(Identifier id, String dim, long seed, String cgen, WorldFolderMode dirMode, String terrainType, boolean modTerrain, boolean modBiomes) {
         File config_dir = new File("config");
         config_dir.mkdirs();
         
@@ -474,6 +502,9 @@ public class CreateCommand implements Command {
 			}
 			
 			config.set("worldFolderSaveMode", dirMode);
+			config.set("terrain_type", terrainType);
+			config.set("mod_terrain", modTerrain);
+			config.set("mod_biomes", modBiomes);
 			
 			// New World Saver
 			config.set("isMultiworldWorld", true);

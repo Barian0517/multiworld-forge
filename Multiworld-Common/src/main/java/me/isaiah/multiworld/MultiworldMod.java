@@ -94,9 +94,8 @@ public class MultiworldMod {
     	return world_creator;
     }
 
-    public static ServerWorld createConfigAndWorld(String id, String dimStr, Identifier dimId, ChunkGenerator gen, Difficulty dif, long seed, String cgen, WorldFolderMode dirMode) {
-    	// CreateCommand.make_config(new_id(id), dimStr, seed, cgen);
-    	CreateCommand.makeConfigFile(new_id(id), dimStr, seed, cgen, dirMode);
+    public static ServerWorld createConfigAndWorld(String id, String dimStr, Identifier dimId, ChunkGenerator gen, Difficulty dif, long seed, String cgen, WorldFolderMode dirMode, String terrainType, boolean modTerrain, boolean modBiomes) {
+    	CreateCommand.makeConfigFile(new_id(id), dimStr, seed, cgen, dirMode, terrainType, modTerrain, modBiomes);
     	return world_creator.create_world(id, dimId, gen, dif, seed);
     }
     

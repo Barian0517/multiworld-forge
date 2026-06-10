@@ -96,6 +96,13 @@ public interface ICreator {
 		return gen;
     } 
 
+    /**
+     * Return a {@link ChunkGenerator} for the given parameters, supporting mod isolation and terrain presets.
+     */
+    default ChunkGenerator get_custom_chunk_gen(MinecraftServer mc, String env, String terrainType, boolean modTerrain, boolean modBiomes) {
+        return get_chunk_gen(mc, env);
+    }
+
 	// TODO: move to icommonlib ?:
 	public BlockPos get_spawn(ServerWorld world);
 	public boolean is_the_end(ServerWorld world);
