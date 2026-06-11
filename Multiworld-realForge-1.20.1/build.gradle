@@ -34,6 +34,10 @@ dependencies {
 	minecraft "com.mojang:minecraft:1.20.1"
     forge "net.minecraftforge:forge:${rootProject.forge_version_1_20_1}"
 	mappings "net.fabricmc:yarn:1.20.1+build.10:v2"
+
+	// WorldEdit API for //regen interception
+	modCompileOnly "com.sk89q.worldedit:worldedit-core:7.2.15"
+	modCompileOnly "com.sk89q.worldedit:worldedit-forge-mc1.20:7.2.15"
 	
 	annotationProcessor 'com.pkware.jabel:jabel-javac-plugin:1.0.1-1'
     compileOnly 'com.pkware.jabel:jabel-javac-plugin:1.0.1-1'

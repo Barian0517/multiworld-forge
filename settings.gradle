@@ -6,9 +6,13 @@ pluginManagement {
         }
         maven { url "https://maven.architectury.dev/" }
         maven { url "https://files.minecraftforge.net/maven/" }
-		maven {
+        maven {
             name = 'Jitpack'
             url = 'https://jitpack.io'
+        }
+        maven {
+            name = 'EngineHub'
+            url = 'https://maven.enginehub.org/repo/'
         }
         gradlePluginPortal()
     }
