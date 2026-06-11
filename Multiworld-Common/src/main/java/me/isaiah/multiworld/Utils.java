@@ -502,6 +502,10 @@ public class Utils {
 				String di = config.getString("difficulty");
 				d = getDifficultyFromName(di);
 			}
+			
+			String terrainType = config.is_set("terrain_type") ? config.getString("terrain_type") : "DEFAULT";
+			boolean modTerrain = config.is_set("mod_terrain") ? config.getBoolean("mod_terrain") : true;
+			boolean modBiomes = config.is_set("mod_biomes") ? config.getBoolean("mod_biomes") : true;
 
 			// Gen
 			if (config.is_set("custom_generator")) {
@@ -513,6 +517,11 @@ public class Utils {
         		} else {
         			System.out.println("Invalid ChunkGenerator: \"" + cg + "\"");
         		}
+			} else {
+				ChunkGenerator customGenInst = MultiworldMod.get_world_creator().get_custom_chunk_gen(mc, env, terrainType, modTerrain, modBiomes);
+				if (customGenInst != null) {
+					gen = customGenInst;
+				}
 			}
 			
 			String id = optId.orElseGet(() -> {

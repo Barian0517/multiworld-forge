@@ -65,7 +65,7 @@ dependencies {
 
 	// 1.20
     minecraft("com.mojang:minecraft:1.20.1") 
-    mappings("net.fabricmc:yarn:1.20.1+build.10")
+    mappings("net.fabricmc:yarn:1.20.1+build.10:v2")
     modImplementation("net.fabricmc:fabric-loader:0.18.3")
 	
 	modImplementation("xyz.nucleoid:fantasy:0.4.11+1.20-rc1")

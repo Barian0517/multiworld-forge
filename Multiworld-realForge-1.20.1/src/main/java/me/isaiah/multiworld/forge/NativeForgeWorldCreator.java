@@ -109,6 +109,9 @@ public class NativeForgeWorldCreator implements ICreator {
         // Force ticking immediately
         world.tick(() -> true);
         
+        // IMPORTANT: Fire Forge LevelLoad event so it initializes ticking, chunk managers, etc.
+        net.minecraftforge.common.MinecraftForge.EVENT_BUS.post(new net.minecraftforge.event.level.LevelEvent.Load(world));
+        
         return world;
     }
 

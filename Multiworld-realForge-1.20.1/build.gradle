@@ -101,36 +101,18 @@ processResources {
 }
 
 shadowJar {
-    sourceSets {
-        main {
-            java {
-                exclude '**/fabric/*.java'
-                exclude '**/fabric/*.class'
-            }
-        }
-    }
-
     exclude "fabric.mod.json"
 	exclude '**/fabric/*.java'
 	exclude '**/fabric/*.class'
 
     configurations = [project.configurations.shadowCommon]
-    // classifier "dev-shadow"
+    archiveClassifier.set("dev-shadow")
 }
 
 remapJar {
-    input.set shadowJar.archiveFile
+    inputFile.set(shadowJar.archiveFile)
     dependsOn shadowJar
-	
-	sourceSets {
-        main {
-            java {
-                exclude '**/fabric/*.java'
-                exclude '**/fabric/*.class'
-            }
-        }
-    }
-    //lassifier null
+    archiveClassifier.set(null)
 }
 
 tasks.named("build") { finalizedBy("copyReport2") }
