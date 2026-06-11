@@ -1,7 +1,6 @@
 package me.isaiah.multiworld;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
 import java.util.concurrent.CompletableFuture;
@@ -239,22 +238,13 @@ public class InfoSuggest implements SuggestionProvider<ServerCommandSource> {
     	}
 
     	// Optional Arguments
-    	int maxDebug = 15;
-        if (cmds.length <= 4 || (cmds.length <= maxDebug && !input.endsWith(" "))) {
-        	if (cmds.length <= 4) {
-        		builder.suggest("-g=<GENERATOR>");
-        		builder.suggest("-s=<SEED>");
-        		builder.suggest("-m=<WorldSaveMode>");
-        		builder.suggest("-t=<TerrainType>");
-        		builder.suggest("-mod-terrain=<true|false>");
-        		builder.suggest("-mod-biomes=<true|false>");
-        		return;
-        	}
-
-        	int n = 4 - 1;
-        	String current = cmds[cmds.length - 1];
-        	String[] beforeCurrent = Arrays.copyOfRange(cmds, n + 1, cmds.length - 1);
-        	String beforeStr = String.join(" " , beforeCurrent);
+        if (cmds.length > 3) {
+            String current = "";
+            if (!input.endsWith(" ")) {
+                current = cmds[cmds.length - 1];
+            }
+            
+            String beforeStr = input.substring(0, input.length() - current.length());
 
         	if (current.startsWith("-s=")) {
         		builder.suggest("-s=1234");
@@ -283,15 +273,13 @@ public class InfoSuggest implements SuggestionProvider<ServerCommandSource> {
         	} else if (current.startsWith("-mod-biomes=")) {
         		builder.suggest("-mod-biomes=true");
         		builder.suggest("-mod-biomes=false");
-	        } else {
-	        	if (current.startsWith("-")) {
-	        		if (!beforeStr.contains("-g=")) builder.suggest("-g=<GENERATOR>");
-	        		if (!beforeStr.contains("-s=")) builder.suggest("-s=<SEED>");
-	        		if (!beforeStr.contains("-m=")) builder.suggest("-m=<WorldSaveMode>");
-	        		if (!beforeStr.contains("-t=")) builder.suggest("-t=<TerrainType>");
-	        		if (!beforeStr.contains("-mod-terrain=")) builder.suggest("-mod-terrain=<true|false>");
-	        		if (!beforeStr.contains("-mod-biomes=")) builder.suggest("-mod-biomes=<true|false>");
-	        	}
+	        } else if (current.isEmpty() || current.startsWith("-")) {
+        		if (!beforeStr.contains("-g=")) builder.suggest("-g=");
+        		if (!beforeStr.contains("-s=")) builder.suggest("-s=");
+        		if (!beforeStr.contains("-m=")) builder.suggest("-m=");
+        		if (!beforeStr.contains("-t=")) builder.suggest("-t=");
+        		if (!beforeStr.contains("-mod-terrain=")) builder.suggest("-mod-terrain=");
+        		if (!beforeStr.contains("-mod-biomes=")) builder.suggest("-mod-biomes=");
 	        }
         }
     }

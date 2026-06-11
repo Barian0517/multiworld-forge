@@ -25,7 +25,7 @@ public class WorldEditHook {
     public static void onCommand(CommandEvent event) {
         String cmd = event.getParseResults().getReader().getString();
         
-        if (cmd.startsWith("/regen") || cmd.startsWith("//regen")) {
+        if (cmd.startsWith("/regen") || cmd.startsWith("//regen") || cmd.startsWith("/worldedit:regen") || cmd.startsWith("worldedit:regen") || cmd.startsWith("regen") || cmd.startsWith("/we:regen")) {
             if (event.getParseResults().getContext().getSource().getPlayer() != null) {
                 ServerPlayerEntity player = event.getParseResults().getContext().getSource().getPlayer();
                 ServerWorld world = player.getServerWorld();
@@ -52,7 +52,7 @@ public class WorldEditHook {
                         LocalSession session = WorldEdit.getInstance().getSessionManager().get(ForgeAdapter.adaptPlayer(player));
                         Region region = session.getSelection(ForgeAdapter.adapt(world));
                         
-                        CustomRegen.regenerate(player, world, region);
+                        CustomRegen.regenerate(player, world, region, session);
                     } catch (IncompleteRegionException e) {
                         player.sendMessage(Text.literal("§c請先選取一個區域！"), false);
                     } catch (Exception e) {
@@ -63,3 +63,4 @@ public class WorldEditHook {
         }
     }
 }
+

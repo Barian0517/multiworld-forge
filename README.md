@@ -64,6 +64,13 @@
 | /mw create \<id> \<dim> [-g=GENERATOR -s=SEED] | multiworld.create |
 | /mw gamerule | multiworld.gamerule |
 以及其他以此類推...
+
+## WorldEdit 支援 (WorldEdit Support)
+
+多世界模組已對 WorldEdit 進行了深度整合與修正。
+當您在自訂世界中使用 `//regen` 重新生成區塊時，模組會攔截並在背景（非同步）使用原始地形資料進行重建，徹底避免了主執行緒死結（伺服器卡死）以及其他模組建築亂入（地形污染）的問題。
+
+同時，本模組的 `//regen` 已完美整合進 WorldEdit 的原生的 Undo 系統！若您對重建結果不滿意，只要輸入 `//undo` 即可無縫還原地形。
  
 ## 即將推出
 
