@@ -6,7 +6,7 @@ license = "gpl"
 [[mods]]
 modId = "multiworld"
 version = "${version}"
-displayName = "Multiworld"
+displayName = "Multiworld Unofficial Forge Port"
 authors = "isaiah"
 description = '''
 This is an example description! Tell everyone what your mod is about!

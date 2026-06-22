@@ -1,8 +1,8 @@
 <img src="https://cdn.modrinth.com/data/cached_images/01d4b3f0a8d469b8d7b36030f2039007500b00f4.png" align="right" height="64">
 
-# 多世界模組 (Multiworld Mod) ![](http://cf.way2muchnoise.eu/multiworld-mod.svg) ![](http://cf.way2muchnoise.eu/versions/multiworld-mod.svg)
+# Multiworld Unofficial Forge Port ![](http://cf.way2muchnoise.eu/multiworld-mod.svg) ![](http://cf.way2muchnoise.eu/versions/multiworld-mod.svg)
 
-多世界模組 (Multiworld Mod) 提供了一個簡單強大的方式，讓您能在同一個 Minecraft 伺服器中建立、管理及傳送至多個自訂世界（維度）。
+Multiworld Unofficial Forge Port 提供了一個簡單強大的方式，讓您能在同一個 Minecraft 伺服器中建立、管理及傳送至多個自訂世界（維度）。
 
 <a href="https://modrinth.com/mod/multiworld/versions?l=fabric"><img src="https://cdn.modrinth.com/data/cached_images/1b54a3f3b03745c57beaa1ab11d9d86b9222a41a.png" width="160"></a>
 <a href="https://modrinth.com/mod/multiworld/versions?l=neoforge"><img src="https://cdn.modrinth.com/data/cached_images/a073c4dc33587010c5b7f0386d3df9e1b0eee3ed.png" width="160"></a>
@@ -98,7 +98,7 @@
 
 ## 🛡️ 權限系統 (Permissions)
 
-多世界模組支援 LuckPerms 或 CyberPerms。
+Multiworld Unofficial Forge Port支援 LuckPerms 或 CyberPerms。
 擁有 `multiworld.admin` 權限或身為 OP 的管理員可使用所有指令。
 
 | 指令 | 權限節點 |
@@ -122,7 +122,7 @@
 
 ## 📄 授權與致謝 (License & Credits)
 
-多世界模組依據 [LGPL v3](LICENSE) 條款開源授權。
+Multiworld Unofficial Forge Port依據 [LGPL v3](LICENSE) 條款開源授權。
 
 - 模組底層使用了 NucleoidMC 團隊的 Fantasy 函式庫來建立動態世界（LGPLv3）。
 - Forge 版本中，使用了一小段來自 [Fabric Dimensions v1](https://github.com/FabricMC/fabric/blob/1.18/fabric-dimensions-v1/src/main/java/net/fabricmc/fabric/impl/dimension/FabricDimensionInternals.java#L45) 的程式碼，該部分依據 Apache License v2.0 條款授權。
