@@ -36,3 +36,14 @@ bin/
 # fabric
 
 run/
+
+# Temp and build files
+temp_src/
+temp_we/
+tmp/
+output/
+saouw/
+.architectury-transformer/
+*.class
+sources.jar
+print_methods.*
